@@ -1,0 +1,6 @@
+server:
+  #   port: ${CLUB_PORT:8080}
+  servlet:
+    context-path: ${SERVLET_CONTEXT_PATH:/account}
+
+

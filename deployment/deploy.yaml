@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-account
+spec:
+  selector:
+    matchLabels:
+      app: account
+      ver: v1
+  replicas: 2
+  template:
+    metadata:
+      name: pod-account
+      labels:
+        app: account
+        ver: v1
+    spec:
+      containers:
+        - name: account
+          image: rkdals213/account
+          imagePullPolicy: Always
+          ports:
+            - name: port-account
+              containerPort: 10001
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+            limits:
+              cpu: 500m
+              memory: 1024Mi
