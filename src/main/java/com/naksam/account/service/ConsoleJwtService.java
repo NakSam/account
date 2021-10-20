@@ -2,6 +2,7 @@ package com.naksam.account.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import com.naksam.account.dto.MemberPayload;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -17,6 +18,8 @@ import java.security.NoSuchAlgorithmException;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Component
 public class ConsoleJwtService {
@@ -83,5 +86,22 @@ public class ConsoleJwtService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException();
         }
+    }
+
+    public Object decodeInfo(String token) {
+        boolean usable = isUsable(token, System.currentTimeMillis());
+
+        if (!usable) {
+            throw new RuntimeException("Unavailable web token!!!");
+        }
+
+        String path = String.format("$.%s", "info");
+        return Stream.of(token)
+                .map(this::parseClaim)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .map(claim -> JsonPath.parse(claim)
+                        .read(path, Object.class))
+                .orElseThrow(() -> new RuntimeException("Unavailable web token!!!"));
     }
 }

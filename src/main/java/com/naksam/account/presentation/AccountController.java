@@ -25,9 +25,9 @@ public class AccountController {
         return ResponseEntity.ok(new JsonWebToken(token));
     }
 
-    @PostMapping("/validate")
-    public ResponseEntity<?> checkToken(@RequestBody JsonWebToken jsonWebToken) {
-        boolean usable = consoleJwtService.isUsable(jsonWebToken.getJsonWebToken(), System.currentTimeMillis());
-        return ResponseEntity.ok(usable);
+    @PostMapping("/info")
+    public ResponseEntity<?> findInfo(@RequestBody JsonWebToken jsonWebToken) {
+        Object info = consoleJwtService.decodeInfo(jsonWebToken.getJsonWebToken());
+        return ResponseEntity.ok(info);
     }
 }

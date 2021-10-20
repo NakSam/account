@@ -6,4 +6,5 @@ import lombok.Data;
 public class MemberPayload {
     private Long id;
     private String email;
+    private String name;
 }
